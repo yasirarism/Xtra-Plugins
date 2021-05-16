@@ -32,7 +32,7 @@ async def scgrp(client, message):
         await pablo.edit("Obrolan Ini Telah Mengaktifkan Mode Malam.")
         return
     await add_night_chat(message.chat.id)
-    await pablo.edit(f"**Ditambahkan Obrolan {message.chat.title} dengan Id {message.chat.id} ke Database. Grup ini akan ditutup pada jam 12PM(WIB) dan akan dibuka pukul 06AM(WIB)**")
+    await pablo.edit(f"**Ditambahkan Obrolan {message.chat.title} dengan Id {message.chat.id} ke Database. Grup ini akan ditutup pada jam 22PM(WIB) dan akan dibuka pukul 6AM(WIB)**")
 
 
 @friday_on_cmd(
