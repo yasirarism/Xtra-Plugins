@@ -26,13 +26,13 @@ import logging
     },
 )
 async def scgrp(client, message):
-    pablo = await edit_or_reply(message, "`Processing...`")
+    pablo = await edit_or_reply(message, "`Memproses...`")
     lol = await is_night_chat_in_db(message.chat.id)
     if lol:
-        await pablo.edit("This Chat is Has Already Enabled Night Mode.")
+        await pablo.edit("Obrolan Ini Telah Mengaktifkan Mode Malam.")
         return
     await add_night_chat(message.chat.id)
-    await pablo.edit(f"**Added Chat {message.chat.title} With Id {message.chat.id} To Database. This Group Will Be Closed On 12Am(IST) And Will Opened On 06Am(IST)**")
+    await pablo.edit(f"**Ditambahkan Obrolan {message.chat.title} dengan Id {message.chat.id} ke Database. Grup ini akan ditutup pada jam 12PM(WIB) dan akan dibuka pukul 06AM(WIB)**")
 
 
 @friday_on_cmd(
@@ -49,10 +49,10 @@ async def scgrp(client, message):
     pablo = await edit_or_reply(message, "`Searching For Anime.....`")
     lol = await is_night_chat_in_db(message.chat.id)
     if not lol:
-        await pablo.edit("This Chat is Has Not Enabled Night Mode.")
+        await pablo.edit("Obrolan Ini Belum Mengaktifkan Mode Malam.")
         return
     await rm_night_chat(message.chat.id)
-    await pablo.edit(f"**Removed Chat {message.chat.title} With Id {message.chat.id} From Database. This Group Will Be No Longer Closed On 12Am(IST) And Will Opened On 06Am(IST)**")
+    await pablo.edit(f"**Menghapus obrolan {message.chat.title} dengan Id {message.chat.id} dari Database. Grup ini tidak akan ditutup pada 22PM(WIB) dan akan dibuka pada 6AM(WIB)**")
 
 
 async def job_close():
@@ -62,7 +62,7 @@ async def job_close():
     for warner in lol:
         try:
             await Friday.send_message(
-              int(warner.get("chat_id")), "`12:00 Am, Group Is Closing Till 6 Am. Night Mode Started !` \n**Powered By @FRidayOT**"
+              int(warner.get("chat_id")), "**🌃 Night Mode Activated**\n\n`Sekarang jam 22:00, Grup ditutup sampai jam 6 pagi. Selamat beristirahat semuanya!!` \n**Powered By YMovieZNew**"
             )
             await Friday.set_chat_permissions(warner.get("chat_id"), ChatPermissions())
             async for member in Friday.iter_chat_members(warner.get("chat_id")):
@@ -80,8 +80,8 @@ async def job_close():
                 pass
 
 
-scheduler = AsyncIOScheduler(timezone="Asia/Kolkata")
-scheduler.add_job(job_close, trigger="cron", hour=23, minute=55)
+scheduler = AsyncIOScheduler(timezone="Asia/Jakarta")
+scheduler.add_job(job_close, trigger="cron", hour=22, minute=0)
 scheduler.start()
 
 async def job_open():
@@ -91,7 +91,7 @@ async def job_open():
     for warner in lol:
         try:
             await Friday.send_message(
-              int(warner.get("chat_id")), "`06:00 Am, Group Is Opening.`\n**Powered By @FRidayOT**"
+              int(warner.get("chat_id")), "`Sekarang jam 6 pagi, selamat pagi, grup kini telah dibuka.`\n**Powered By YMovieZNew**"
             )
             await Friday.set_chat_permissions(
                         warner.get("chat_id"),
@@ -112,6 +112,6 @@ async def job_open():
                 pass
             
 
-scheduler = AsyncIOScheduler(timezone="Asia/Kolkata")
-scheduler.add_job(job_open, trigger="cron", hour=6, minute=10)
+scheduler = AsyncIOScheduler(timezone="Asia/Jakarta")
+scheduler.add_job(job_open, trigger="cron", hour=6, minute=0)
 scheduler.start()
