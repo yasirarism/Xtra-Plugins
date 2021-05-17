@@ -62,9 +62,15 @@ async def job_close():
     for warner in lol:
         try:
             await Friday.send_message(
-              int(warner.get("chat_id")), "**🌃 Night Mode Activated**\n\n`Sekarang jam 22:00, Grup ditutup sampai jam 6 pagi. Selamat beristirahat semuanya!!` \n**Powered By YMovieZNew**"
+              int(warner.get("chat_id")), "**🌃 Mode Malam Aktif**\n\n`Sekarang jam 22:00, Grup ditutup dan akan dibuka esok hari secara otomais. Selamat beristirahat semuanya!!` \n**Powered By Yasir UBot**"
             )
-            await Friday.set_chat_permissions(warner.get("chat_id"), ChatPermissions())
+            await Friday.set_chat_permissions(
+                        warner.get("chat_id"),
+                        ChatPermissions(
+                            can_send_messages=False,
+                            can_invite_users=True,
+                         )
+            )
             async for member in Friday.iter_chat_members(warner.get("chat_id")):
              if member.user.is_deleted:
                 try:
@@ -91,15 +97,18 @@ async def job_open():
     for warner in lol:
         try:
             await Friday.send_message(
-              int(warner.get("chat_id")), "`Sekarang jam 6 pagi, selamat pagi, grup kini telah dibuka.`\n**Powered By YMovieZNew**"
+              int(warner.get("chat_id")), "`Sekarang sudah jam 6 pagi. Selamat pagi, grup kini telah dibuka semoga hari-harimu menyenangkan.`\n**Powered By Yasir UBot**"
             )
             await Friday.set_chat_permissions(
                         warner.get("chat_id"),
                         ChatPermissions(
                             can_send_messages=True,
                             can_send_media_messages=True,
-                            can_send_stickers=True,
-                            can_send_animations=True
+                            can_send_stickers=False,
+                            can_send_animations=True,
+                            can_invite_users=True,
+                            can_add_web_page_previews=True,
+                            can_use_inline_bots=True
                          )
             )
             
