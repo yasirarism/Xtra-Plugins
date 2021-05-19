@@ -14,6 +14,8 @@ from pyrogram.types import ChatPermissions
 from main_startup.helper_func.logger_s import LogIt
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import logging
+import requests
+import json
 
 @friday_on_cmd(
     ["scgrp"],
@@ -62,7 +64,7 @@ async def job_close():
     for warner in lol:
         try:
             await Friday.send_message(
-              int(warner.get("chat_id")), "**🌃 Mode Malam Aktif**\n\n`Sekarang jam 22:00, Grup ditutup dan akan dibuka esok hari secara otomais. Selamat beristirahat semuanya!!` \n**Powered By Yasir UBot**"
+              int(warner.get("chat_id")), "**🌃 Mode Malam Aktif**\n\n`Sekarang jam 22:00, Grup ditutup dan akan dibuka esok hari secara otomatis. Selamat beristirahat semuanya!!` \n**Powered By Pyrogram**"
             )
             await Friday.set_chat_permissions(
                         warner.get("chat_id"),
@@ -91,13 +93,17 @@ scheduler.add_job(job_close, trigger="cron", hour=22, minute=0)
 scheduler.start()
 
 async def job_open():
+    req = requests.get('http://fadhil-s.herokuapp.com/api/random_quotes.php?apikey=dwh20ud9u0q2ijsd092099139jp')
+    json = req.json()
+    quote = json["data"]["quotes"]
+    author = json["data"]["by"]
     lol = await get_all_night_chats()
     if len(lol) == 0:
         return
     for warner in lol:
         try:
             await Friday.send_message(
-              int(warner.get("chat_id")), "`Sekarang sudah jam 6 pagi. Selamat pagi, grup kini telah dibuka semoga hari-harimu menyenangkan.`\n**Powered By Yasir UBot**"
+              int(warner.get("chat_id")), "`Sekarang sudah jam 6 pagi. Selamat pagi, grup kini telah dibuka semoga hari-harimu menyenangkan.`\n\nQuotes Today:\n"+quote+"~ "+author+"\n**Powered By Pyrogram**"
             )
             await Friday.set_chat_permissions(
                         warner.get("chat_id"),
