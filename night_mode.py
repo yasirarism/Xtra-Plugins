@@ -103,7 +103,7 @@ async def job_open():
     for warner in lol:
         try:
             await Friday.send_message(
-              int(warner.get("chat_id")), "`Sekarang sudah jam 6 pagi. Selamat pagi, grup kini telah dibuka semoga hari-harimu menyenangkan.`\n\nQuotes Today:\n"+quote+"~ "+author+"\n**Powered By Pyrogram**"
+              int(warner.get("chat_id")), "`Sekarang sudah jam 6 pagi. Selamat pagi, grup kini telah dibuka semoga hari-harimu menyenangkan.`\n\n**Quotes Today:**\n"+quote+"\n~ "+author+"\n**Powered By Pyrogram**"
             )
             await Friday.set_chat_permissions(
                         warner.get("chat_id"),
