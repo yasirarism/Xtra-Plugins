@@ -19,7 +19,6 @@ import re
         "example": "{ch}imdb joker",
     }
 )
-
 async def _(client,message):
     msgg = get_text(message)
     sedlife = await edit_or_reply(message, "```Searching For Movie..```")
@@ -30,7 +29,7 @@ async def _(client,message):
         movie_name = msgg
         final_name = "+".join(movie_name)
         page = requests.get(
-            "https://www.imdb.com/find?ref_=nv_sr_fn&q=" + final_name + "&s=all"
+            f"https://www.imdb.com/find?ref_=nv_sr_fn&q={final_name}&s=all"
         )
         str(page.status_code)
         soup = bs4.BeautifulSoup(page.content, "lxml")
@@ -51,32 +50,25 @@ async def _(client,message):
         else:
             mov_details = ""
         credits = soup.findAll("div", "credit_summary_item")
+        director = credits[0].a.text
         if len(credits) == 1:
-            director = credits[0].a.text
             writer = "Not available"
             stars = "Not available"
         elif len(credits) > 2:
-            director = credits[0].a.text
             writer = credits[1].a.text
-            actors = []
-            for x in credits[2].findAll("a"):
-                actors.append(x.text)
+            actors = [x.text for x in credits[2].findAll("a")]
             actors.pop()
-            stars = actors[0] + "," + actors[1] + "," + actors[2]
+            stars = f"{actors[0]},{actors[1]},{actors[2]}"
         else:
-            director = credits[0].a.text
             writer = "Not available"
-            actors = []
-            for x in credits[1].findAll("a"):
-                actors.append(x.text)
+            actors = [x.text for x in credits[1].findAll("a")]
             actors.pop()
-            stars = actors[0] + "," + actors[1] + "," + actors[2]
+            stars = f"{actors[0]},{actors[1]},{actors[2]}"
         if soup.find("div", "inline canwrap"):
             story_line = soup.find("div", "inline canwrap").findAll("p")[0].text
         else:
             story_line = "Not available"
-        info = soup.findAll("div", "txt-block")
-        if info:
+        if info := soup.findAll("div", "txt-block"):
             mov_country = []
             mov_language = []
             for node in info:
@@ -92,9 +84,7 @@ async def _(client,message):
         else:
             mov_rating = "Not available"
         await sedlife.edit(
-            "<a href=" + poster + ">&#8203;</a>"
-            "<b>Title : </b><code>"
-            + mov_title
+            f"<a href={poster}>&#8203;</a><b>Title : </b><code>{mov_title}"
             + "</code>\n<code>"
             + mov_details
             + "</code>\n<b>Rating : </b><code>"
@@ -113,7 +103,7 @@ async def _(client,message):
             + mov_link
             + "\n<b>Story Line : </b>"
             + story_line,
-            parse_mode="HTML"
+            parse_mode="HTML",
         )
     except IndexError:
         await sedlife.edit("Ploxxx enter **Valid movie name** kthx")

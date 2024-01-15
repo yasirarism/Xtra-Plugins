@@ -85,22 +85,17 @@ async def remove_nsfw(client, message):
 
 async def is_harem_enabled(f, client, message):
     if Config.ENABLE_WAIFU_FOR_ALL_CHATS:
-        return bool(True)
-    if await is_chat_in_db(int(message.chat.id)):
-        return bool(True)
-    else:
-        return bool(False)
+        return True
+    return bool(await is_chat_in_db(int(message.chat.id)))
 
 async def harem_event(f, client, message):
     if not message:
-        return bool(False)
+        return False
     if not message.photo:
-        return bool(False)
+        return False
     if not message.photo.caption:
-        return bool(False)
-    if "add" in message.photo.caption.lower():
-            return bool(True)
-    return bool(False)
+        return False
+    return "add" in message.photo.caption.lower()
 
 
 harem_event = filters.create(func=harem_event, name="harem_event")
@@ -108,7 +103,7 @@ is_harem_enabled = filters.create(func=is_harem_enabled, name="is_harem_enabled"
 
 
 
-@listen(filters.user([int(792028928)]) & ~filters.edited & is_harem_enabled & harem_event & filters.group)
+@listen(filters.user([792028928]) & ~filters.edited & is_harem_enabled & harem_event & filters.group)
 async def harem_catcher(client, message):
     img = await message.download()
     searchUrl = "https://www.google.com/searchbyimage/upload"
@@ -119,7 +114,7 @@ async def harem_catcher(client, message):
     if response.status_code == 400:
         return logging.info("(Waifu Catch Failed) - [Invalid Response]")
     fetchUrl = response.headers["Location"]
-    match = await ParseSauce(fetchUrl + "&preferences?hl=en&fg=1#languages")
+    match = await ParseSauce(f"{fetchUrl}&preferences?hl=en&fg=1#languages")
     guessp = match["best_guess"]
     if not guessp:
        return logging.info("(Waifu Catch Failed.) \nERROR : 404: Waifu Not Found.")

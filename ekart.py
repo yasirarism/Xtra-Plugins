@@ -30,7 +30,7 @@ async def ekart(client, message):
         + str(input_str)
     )
 
-    url = "https://ekart-api-chi.vercel.app/check?id=" + str(input_str)
+    url = f"https://ekart-api-chi.vercel.app/check?id={str(input_str)}"
     r = requests.get(url)
     h = r.json()
     merchant = h.get("merchant_name")

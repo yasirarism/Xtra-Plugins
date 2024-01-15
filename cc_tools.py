@@ -56,7 +56,7 @@ async def namso_gen(bin, no_of_result=15):
     elem.send_keys(bin)
     await asyncio.sleep(2)
     elem3 = driver.find_element_by_xpath(no_of_r_xpath)
-    for i in range(2):
+    for _ in range(2):
         elem3.send_keys(Keys.BACKSPACE)
         await asyncio.sleep(1)
     elem3 = driver.find_element_by_xpath(no_of_r_xpath)
@@ -137,9 +137,13 @@ async def check_stripe_key(key_: str):
         return 200
     
 def stark_finder(to_find, from_find):
-    if re.search(r"( |^|[^\w])" + re.escape(to_find) + r"( |$|[^\w])", from_find, flags=re.IGNORECASE):
-        return True
-    return False
+    return bool(
+        re.search(
+            r"( |^|[^\w])" + re.escape(to_find) + r"( |$|[^\w])",
+            from_find,
+            flags=re.IGNORECASE,
+        )
+    )
 
     
 async def cc_(cc):
@@ -157,7 +161,7 @@ async def cc_(cc):
     mes = response_['exp_month']
     yes = response_['exp_year']
     cvc = response_['cvc']
-    final_t = f"""
+    return f"""
 <b><u>Result</b></u>
 
 <b>CC Number :</b> <code>{cc}</code>
@@ -170,7 +174,6 @@ async def cc_(cc):
 
 <b><u>Checked Using FridayUB</b></u>
 """
-    return final_t
     
 @friday_on_cmd(
     ["ccn"],

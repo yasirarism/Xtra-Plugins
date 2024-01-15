@@ -95,8 +95,6 @@ async def track_amazon():
                 f"#Tracker - Price Reduced \nProduct Name : {title} \nCurrent price : {price}",
             )
             await rmamazon_tracker(str(ujwal["amazon_link"]))
-        else:
-            pass
 
 
 scheduler = AsyncIOScheduler(timezone="Asia/Kolkata")

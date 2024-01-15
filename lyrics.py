@@ -30,8 +30,7 @@ async def _(client,message):
         await lel.edit("`Give Me Input!`")
         return
     song = None
-    song = Song.find_song(query)
-    if song:
+    if song := Song.find_song(query):
         if song.lyrics:
             reply = song.format()
         else:

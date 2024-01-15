@@ -28,11 +28,9 @@ from pyrogram import filters
                "help": "Convert Python Codes To Highlighted Html / Image",
                "example": "{ch}cih (replying to py file)"})
 async def convert_to_image_or_html(client, message):
-    force_html = False
     msg_ = await edit_or_reply(message, "`Please Wait!`")
     t = get_text(message)
-    if t:
-        force_html = True
+    force_html = bool(t)
     if not message.reply_to_message:
         await msg_.edit("`Please Reply To A Python Document.`")
         return
@@ -56,10 +54,9 @@ async def create_html_or_img(file, force_html=False):
     if force_html:
         file_name = "code.html"
         await run_cmd(f"pygmentize -f html -O full -o {file_name} {file}")
-        return file_name
     else:
         file_name = "code.jpg"
         f_jpg = open(file_name, 'wb')
         lexer = guess_lexer(file_z)
         f_jpg.write(highlight(file_z, lexer, JpgImageFormatter()))
-        return file_name
+    return file_name

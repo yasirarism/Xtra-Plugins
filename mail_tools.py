@@ -47,9 +47,7 @@ async def add_mail_to_db(client, message):
             "`What are you providing me lmao?. Check Help Menu Idiot!`"
         )
         return
-    if domain.lower() in supported_domains:
-        pass
-    else:
+    if domain.lower() not in supported_domains:
         await pablo.edit("`Oops, I don't Support that Domain! Check Help Menu To Get Supported Site List!`")
         return
     await add_mail_update_mail(mail_id)
@@ -116,16 +114,7 @@ async def check_mail(client, message):
 **Date :** {date}
 **Subject :** {sub}
 **Body :** {body}"""
-    if not is_file:
-        if len(last) > 1024:
-            file_names = "email.text"
-            open(file_names, "w").write(last)
-            await client.send_document(message.chat.id, file_names, caption = "Your Mail")
-            os.remove(file_names)
-        else:
-            await client.send_message(
-                message.chat.id, last)
-    else:
+    if is_file:
         if len(last) > 1024:
             await client.send_document(message.chat.id, fl_name, caption = "Your Mail Attachment")
             await client.send_document(message.chat.id, file_names, caption = "Your Mail")
@@ -134,6 +123,14 @@ async def check_mail(client, message):
         else:
             await client.send_document(message.chat.id, fl_name, caption = last)
             os.remove(fl_name)
+    elif len(last) > 1024:
+        file_names = "email.text"
+        open(file_names, "w").write(last)
+        await client.send_document(message.chat.id, file_names, caption = "Your Mail")
+        os.remove(file_names)
+    else:
+        await client.send_message(
+            message.chat.id, last)
     await pablo.delete()
         
 
@@ -169,16 +166,14 @@ async def all_mails(client, message):
         await pablo.edit("`You Sure You Added Your Mail To dB?`")
         return
     last_msg = await get_msg_id(email)
-    msg_ids = []
     mail_ = email.split("@", 1)
     login = mail_[0]
     domain = mail_[1]
     link = f"https://www.1secmail.com/api/v1/?action=getMessages&login={login}&domain={domain}"
     r = requests.get(link)
     r_json = r.json()
-    for lol in r_json:
-       msg_ids.append(lol.get("id"))
-    if msg_ids == []:
+    msg_ids = [lol.get("id") for lol in r_json]
+    if not msg_ids:
         await pablo.edit("You Didn't Receive Any Mails")
         return
     for id in msg_ids:
@@ -201,24 +196,23 @@ async def all_mails(client, message):
 **Date :** {date}
 **Subject :** {sub}
 **Body :** {body}"""
-        if not is_file:
+        if is_file:
             if len(last) > 1024:
-                 file_names = "email.text"
-                 open(file_names, "w").write(last)
+                 await client.send_document(message.chat.id, fl_name, caption = "Your Mail Attachment")
                  await client.send_document(message.chat.id, file_names, caption = "Your Mail")
+                 os.remove(fl_name)
                  os.remove(file_names)
             else:
-                await client.send_message(
-                    message.chat.id, last)
+                     await client.send_document(message.chat.id, fl_name, caption = last)
+                     os.remove(fl_name)
+        elif len(last) > 1024:
+            file_names = "email.text"
+            open(file_names, "w").write(last)
+            await client.send_document(message.chat.id, file_names, caption = "Your Mail")
+            os.remove(file_names)
         else:
-             if len(last) > 1024:
-                  await client.send_document(message.chat.id, fl_name, caption = "Your Mail Attachment")
-                  await client.send_document(message.chat.id, file_names, caption = "Your Mail")
-                  os.remove(fl_name)
-                  os.remove(file_names)
-             else:
-                      await client.send_document(message.chat.id, fl_name, caption = last)
-                      os.remove(fl_name)
+            await client.send_message(
+                message.chat.id, last)
         await pablo.delete()
 
 
@@ -259,7 +253,7 @@ async def track_mails():
         return
     else:
         await add_msg_update_msg(latest_mail)
-    
+
     kk = f"https://www.1secmail.com/api/v1/?action=readMessage&login={login}&domain={domain}&id={latest_mail}"
     r = requests.get(kk)
     lmao = r.json()
@@ -279,16 +273,7 @@ async def track_mails():
 **Date :** {date}
 **Subject :** {sub}
 **Body :** {body}"""
-    if not is_file:
-        if len(last) > 1024:
-            file_names = "email.text"
-            open(file_names, "w").write(last)
-            await Friday.send_document(Config.LOG_GRP, file_names, caption = "Your Mail")
-            os.remove(file_names)
-        else:
-            await Friday.send_message(
-                Config.LOG_GRP, last)
-    else:
+    if is_file:
         if len(last) > 1024:
             await Friday.send_document(Config.LOG_GRP, fl_name, caption = "Your Mail Attachment")
             await Friday.send_document(Config.LOG_GRP, file_names, caption = "Your Mail")
@@ -297,6 +282,15 @@ async def track_mails():
         else:
             await Friday.send_document(Config.LOG_GRP, fl_name, caption = last)
             os.remove(fl_name)
+
+    elif len(last) > 1024:
+        file_names = "email.text"
+        open(file_names, "w").write(last)
+        await Friday.send_document(Config.LOG_GRP, file_names, caption = "Your Mail")
+        os.remove(file_names)
+    else:
+        await Friday.send_message(
+            Config.LOG_GRP, last)
 
 scheduler = AsyncIOScheduler()
 scheduler.add_job(track_mails, 'interval', minutes=5)

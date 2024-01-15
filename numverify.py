@@ -36,16 +36,16 @@ async def phone_info(phone_number: int):
     },
 )
 async def get_info_by_number(client, message):
-    m_ = await edit_or_reply(message, "<code>Processing...</code>", parse_mode="html")
-    numbe_r = get_text(message)
-    if not numbe_r:
-      return await m_.edit("<code>Give Me Phone Number As Input.</code>")
-    try:
-      numbe_r = int(numbe_r)
-    except ValueError:
-      return await m_.edit("<code>Invalid Phone Number.</code>")
-    js_n_r = await phone_info(int(numbe_r))
-    if not js_n_r.get("valid"):
-      return await m_.edit("<code>Invalid Phone Number!</code>")
-    final_text = f"<b><u>Phone Info For {numbe_r}</b></u> \n<b>Country :</b> {js_n_r.get('country_name')} \n<b>Location :</b> {js_n_r.get('location')} \n<b>Carrier :</b> {js_n_r.get('carrier')} \n<b>Line Type :</b> {js_n_r.get('line_type').title()}"
-    await m_.edit(final_text, parse_mode='html')
+  m_ = await edit_or_reply(message, "<code>Processing...</code>", parse_mode="html")
+  numbe_r = get_text(message)
+  if not numbe_r:
+    return await m_.edit("<code>Give Me Phone Number As Input.</code>")
+  try:
+    numbe_r = int(numbe_r)
+  except ValueError:
+    return await m_.edit("<code>Invalid Phone Number.</code>")
+  js_n_r = await phone_info(numbe_r)
+  if not js_n_r.get("valid"):
+    return await m_.edit("<code>Invalid Phone Number!</code>")
+  final_text = f"<b><u>Phone Info For {numbe_r}</b></u> \n<b>Country :</b> {js_n_r.get('country_name')} \n<b>Location :</b> {js_n_r.get('location')} \n<b>Carrier :</b> {js_n_r.get('carrier')} \n<b>Line Type :</b> {js_n_r.get('line_type').title()}"
+  await m_.edit(final_text, parse_mode='html')

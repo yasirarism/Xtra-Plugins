@@ -25,7 +25,7 @@ async def github_(client,message):
     if not text:
         await editer.edit("`Please Enter Valid Input`")
         return
-    url = "https://api.github.com/users/{}".format(text)
+    url = f"https://api.github.com/users/{text}"
     r = requests.get(url)
     if r.status_code != 404:
         b = r.json()
@@ -45,4 +45,4 @@ async def github_(client,message):
         else:
             await msg.edit(cap)
     else:
-        await msg.edit(f"`404 : UserNot Found!`")
+        await msg.edit("`404 : UserNot Found!`")

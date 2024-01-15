@@ -108,8 +108,7 @@ def gen_random_slap(user1, user2):
     item = random.choice(ITEMS)
     hit = random.choice(HIT)
     throw = random.choice(THROW)
-    wow = temp.format(user1=user1, user2=user2, item=item, hits=hit, throws=throw)
-    return wow
+    return temp.format(user1=user1, user2=user2, item=item, hits=hit, throws=throw)
 
 
 @friday_on_cmd(
@@ -175,8 +174,8 @@ async def type_my_ass(client, msg):
     await typew.edit(typing_symbol)
     await asyncio.sleep(sleep_time)
     for character in message:
-        old_text = old_text + "" + character
-        typing_text = old_text + "" + typing_symbol
+        old_text = f"{old_text}{character}"
+        typing_text = f"{old_text}{typing_symbol}"
         await typew.edit(typing_text)
         await asyncio.sleep(sleep_time)
         await typew.edit(old_text)

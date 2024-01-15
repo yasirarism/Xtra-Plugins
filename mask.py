@@ -24,10 +24,8 @@ async def mask(client, message):
         await pablo.edit("Please Reply To A Image")
         return
     if message.reply_to_message.sticker:
-        if message.reply_to_message.sticker.mime_type == "image/webp":
-           pass
-        else:
-           return
+        if message.reply_to_message.sticker.mime_type != "image/webp":
+            return
     await message.reply_to_message.copy("hazmat_suit_bot")
     time.sleep(1.5)
     try:

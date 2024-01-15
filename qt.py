@@ -24,11 +24,7 @@ async def nice_qbot(client, message):
     m = await edit_or_reply(message, "`Making A Quote.`")
     query = get_text(message)
     msg_ids = []
-    if not query:
-        if not message.reply_to_message:
-            return await m.edit("`Reply To Message To Make A Quote.`")
-        msg_ids.append(message.reply_to_message.message_id)   
-    else:
+    if query:
         if not query.isdigit():
             return await m.edit("`Uh? Only Digits My Friend.`")
         if int(query) == 0:
@@ -36,9 +32,13 @@ async def nice_qbot(client, message):
         async for msg in client.iter_history(chat_id=message.chat.id, reverse=True, limit=int(query)):
             if message.message_id != msg.message_id:
                 msg_ids.append(msg.message_id)
+    elif not message.reply_to_message:
+        return await m.edit("`Reply To Message To Make A Quote.`")
+    else:
+        msg_ids.append(message.reply_to_message.message_id)
     if not msg_ids:
         return await m.edit("`Uh?, You Are Zero.`")
-    await client.forward_messages("@QuotLyBot", message.chat.id, msg_ids) 
+    await client.forward_messages("@QuotLyBot", message.chat.id, msg_ids)
     await asyncio.sleep(7)
     histor_ = await check_history("@QuotLyBot", client)
     if not histor_:
@@ -55,6 +55,4 @@ async def check_history(bot, client):
     its_history = (await client.get_history(bot, 1))[0]
     if its_history.from_user.id == client.me.id:
         return None
-    if not its_history.sticker:
-        return None
-    return its_history
+    return None if not its_history.sticker else its_history

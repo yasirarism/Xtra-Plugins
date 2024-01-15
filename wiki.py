@@ -35,6 +35,6 @@ async def wikipediasearch(Client, message):
         except BaseException:
             pass
     await event.edit(
-        "WikiPedia Search: {} \n\n Result: \n\n{}".format(query, result),
+        f"WikiPedia Search: {query} \n\n Result: \n\n{result}",
         disable_web_page_preview=True,
     )

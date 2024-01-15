@@ -19,10 +19,7 @@ import requests
 from main_startup.helper_func.plugin_helpers import convert_to_image
 
 
-if Config.REM_BG_API_KEY:
-    key = Config.REM_BG_API_KEY
-else:
-    key = None
+key = Config.REM_BG_API_KEY if Config.REM_BG_API_KEY else None
 
 def _check_rmbg(func):
     @wraps(func)
@@ -79,12 +76,10 @@ async def rmbg(client, message):
         end = datetime.now()
         ms = (end - start).seconds
         await pablo.edit(
-            "Removed image's Background in {} seconds, powered by @FridayOT".format(ms)
+            f"Removed image's Background in {ms} seconds, powered by @FridayOT"
         )
     else:
         await pablo.edit(
-            "ReMove.BG API returned Errors. Please report to @FridayOT\n`{}".format(
-                output_file_name.content.decode("UTF-8")
-            )
+            f'ReMove.BG API returned Errors. Please report to @FridayOT\n`{output_file_name.content.decode("UTF-8")}'
         )
 
